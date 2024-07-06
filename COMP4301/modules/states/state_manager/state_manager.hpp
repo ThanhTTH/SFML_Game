@@ -29,15 +29,15 @@ public:
     bool HasState(const StateType& l_type);
     void SwitchTo(const StateType& l_type);
     void Remove(const StateType& l_type);
-private:
-    void CreateState(const StateType& l_type);
-    void RemoveState(const StateType& l_type);
     template<class T>
     void RegisterState(const StateType& l_type) {
         m_stateFactory[l_type] = [this]() -> T* {
             return new T(this);
         };
     }
+private:
+    void CreateState(const StateType& l_type);
+    void RemoveState(const StateType& l_type);
     // Data
     SharedContext * m_shared;
     StateContainer m_stateContainer;

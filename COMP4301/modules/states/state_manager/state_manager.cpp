@@ -1,9 +1,8 @@
 #include "state_manager.hpp"
 
 StateManager::StateManager(SharedContext* l_shared_context) 
-:m_shared(l_shared_context){
-    RegisterState<StateMainMenu>(StateType::MainMenu);
-    RegisterState<StateGame>(StateType::Game);
+    :m_shared(l_shared_context){
+
 }
 //
 StateManager::~StateManager() {

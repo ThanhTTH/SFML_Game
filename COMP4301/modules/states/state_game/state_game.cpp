@@ -11,11 +11,13 @@ StateGame::StateGame(StateManager* l_stateManager)
     m_prevTime(0.0f),
     m_moving_state(false),
     m_isStop(false),
-    m_score(0) {
+    m_score(0),
+    m_working_direction(Utilitis::GetWorkingDirectory()) {
 
 }
 //
 StateGame::~StateGame(){
+    //
     for(auto& enemy : m_enemies) {
         delete enemy;
     }
@@ -28,22 +30,21 @@ StateGame::~StateGame(){
 void StateGame::Oncreate() {
     SetTransparent(true);
     sf::RenderWindow* window = m_stateManager->GetContext()->m_wind->GetRenderWindow();
-    std::string working_directory = Utilitis::GetWorkingDirectory();
-    std::string hero_assets_path = working_directory + "Assets/graphics/hero_left.png";
+    std::string hero_assets_path = m_working_direction + "Assets/graphics/hero_left.png";
     sf::Vector2f l_hero_position = sf::Vector2f(window->getSize().x * 0.25f, window->getSize().y * 0.5f);
     float l_hero_speed = 200.0f;
     m_hero.Initialize(hero_assets_path);
     m_hero.setPosition(l_hero_position);
     m_hero.setSpeed(l_hero_speed);
     //
-    std::string sky_assets_path = working_directory + "Assets/graphics/sky.png";
+    std::string sky_assets_path = m_working_direction + "Assets/graphics/sky.png";
     m_sky.Initialize(sky_assets_path);
     //
 
-    std::string bg_assets_path = working_directory + "Assets/graphics/bg.png";
+    std::string bg_assets_path = m_working_direction + "Assets/graphics/bg.png";
     m_background.Initialize(bg_assets_path);
     //
-    std::string font_path = working_directory + "Assets/fonts/arial.ttf";
+    std::string font_path = m_working_direction + "Assets/fonts/arial.ttf";
     m_font.loadFromFile(font_path);
     m_text.setFont(m_font);
     m_text.setString("Score : 0");
@@ -64,7 +65,7 @@ void StateGame::Oncreate() {
 }
 //
 void StateGame::RocketGender() {
-    std::string rocket_assets_path = Utilitis::GetWorkingDirectory() + "Assets/graphics/rocket.png";
+    std::string rocket_assets_path = m_working_direction + "Assets/graphics/rocket.png";
     Rocket* rocket = new Rocket();
     sf::Vector2f l_rocket_position = sf::Vector2f(m_hero.getSprite().getPosition().x + m_hero.getSprite().getTexture()->getSize().x/2, m_hero.getSprite().getPosition().y + 10);
     rocket->Initialize(rocket_assets_path);
@@ -125,7 +126,7 @@ void StateGame::Update(const sf::Time& l_time) {
             delete (rocket);
         }
     }
-    //
+    // Check collision when enemy and rocket
     for (int i = 0; i < m_enemies.size(); i++)
     {
         for (int j = 0; j < m_rockets.size(); j++)
@@ -157,11 +158,15 @@ void StateGame::Update(const sf::Time& l_time) {
     //Update state of hero characters
     m_hero.Update(distance);
 }
-//
+//Draw object in game state
 void StateGame::Draw() {
+    //Get window object
     sf::RenderWindow* window = m_stateManager->GetContext()->m_wind->GetRenderWindow();
+    //Draw sky background
     window->draw(m_sky.getSprite());
+    //Draw background
     window->draw(m_background.getSprite());
+    //Draw hero object
     window->draw(m_hero.getSprite());
     //Draw enemy
     for(Enemy* enemy : m_enemies) {
@@ -171,10 +176,12 @@ void StateGame::Draw() {
     for(Rocket* rocket : m_rockets) {
         window->draw(rocket->getSprite());
     }
+    //Draw score
     window->draw(m_text);
 }
 //
 void StateGame::MouseClick(EventDetails* l_event_details) {
+    //When left mouse clicked, generate a rocket object
     RocketGender();
 }
 //
@@ -223,7 +230,7 @@ void StateGame::EnemyGender() {
         std::cout << "Incorerect y value" << std::endl;
         break;
     }
-    std::string enemy_assets_path = Utilitis::GetWorkingDirectory() + "Assets/graphics/enemy.png";
+    std::string enemy_assets_path = m_working_direction + "Assets/graphics/enemy.png";
     Enemy *enemy = new Enemy();
     enemy->Initialize(enemy_assets_path);
     enemy->setPosition(enemyPos);

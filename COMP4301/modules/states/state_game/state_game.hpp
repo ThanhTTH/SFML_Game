@@ -45,6 +45,7 @@ private:
     sf::Font m_font;
 	sf::Text m_text;
     std::uint32_t m_score;
+    std::string m_working_direction;
 };
 
 #endif //STATE_GAME_HPP

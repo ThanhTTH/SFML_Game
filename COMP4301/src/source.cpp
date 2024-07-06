@@ -8,7 +8,6 @@ int main(int argc, char const *argv[]) {
     game.Update();
     game.Render();
     game.LateUpdate();
-    
   }
   return 0;
 }

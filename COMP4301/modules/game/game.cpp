@@ -8,7 +8,8 @@ Game::Game()
     srand(time(nullptr));
     m_context.m_wind = &m_window;
     m_context.m_event_manager = m_window.GetEventManager();
-
+    m_StateManager.RegisterState<StateMainMenu>(StateType::MainMenu);
+    m_StateManager.RegisterState<StateGame>(StateType::Game);
     m_StateManager.SwitchTo(StateType::MainMenu);
 }
 //
